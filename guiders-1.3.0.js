@@ -89,6 +89,7 @@ var guiders = (function($) {
     "leftTop": 10
   };
   guiders._windowHeight = 0;
+  guiders._onShowCallbacks = [];
   
   // Basic IE browser detection
   var ieBrowserMatch = navigator.userAgent.match('MSIE (.)');
@@ -514,6 +515,10 @@ var guiders = (function($) {
     return guiders;
   };
 
+  guiders.onShow = function(callback) {
+    guiders._onShowCallbacks.push(callback);
+  }
+
   guiders.show = function(id) {
     if (!id && guiders._lastCreatedGuiderID) {
       id = guiders._lastCreatedGuiderID;
@@ -538,6 +543,12 @@ var guiders = (function($) {
     if (myGuider.onShow) {
       myGuider.onShow(myGuider);
     }
+    
+    // trigger onShow callback
+    for (var i = 0; i< guiders._onShowCallbacks.length; i++) {
+      guiders._onShowCallbacks[i](myGuider); 
+    }
+
     guiders._attach(myGuider);
     myGuider.elem.fadeIn("fast").data("locked", false);
       
