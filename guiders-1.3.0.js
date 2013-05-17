@@ -402,6 +402,8 @@ var guiders = (function($) {
         return;
       }
       else {
+        // as some guide can be skipped, prev should be dynamic
+        nextGuider.prev = currentGuider.id;
         guiders.show(nextGuiderId);
       }
     }
