@@ -559,8 +559,8 @@ var guiders = (function($) {
     }
 
     // trigger onShow callback
-    for (var i = 0; i< guiders._onShowCallbacks.length; i++) {
-      guiders._onShowCallbacks[i](myGuider);
+    if (guiders._onShow) {
+      guiders._onShow(myGuider);
     }
 
     guiders._attach(myGuider);
