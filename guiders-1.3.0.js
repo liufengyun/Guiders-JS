@@ -89,7 +89,8 @@ var guiders = (function($) {
     "leftTop": 10
   };
   guiders._windowHeight = 0;
-  guiders._onShowCallbacks = [];
+  guiders._onShow = null;
+  guiders._onClose = null;
   
   // Basic IE browser detection
   var ieBrowserMatch = navigator.userAgent.match('MSIE (.)');
@@ -127,6 +128,9 @@ var guiders = (function($) {
               if (myGuider.onClose) {
                 myGuider.onClose(myGuider, false /* close by button */);
               }
+              if (guiders._onClose) {
+                guiders._onClose(myGuider, false /* close by button */);
+              }
             });
             break;
           case guiders._nextButtonTitle.toLowerCase():
@@ -163,8 +167,11 @@ var guiders = (function($) {
     xButton.click(function() {
       guiders.hideAll();
       if (myGuider.onClose) {
-        myGuider.onClose(myGuider, true);
-       }
+        myGuider.onClose(myGuider, true /* close by X/Escape */);
+      }
+      if (guiders._onClose) {
+        guiders._onClose(myGuider, true /* close by X/Escape */);
+      }
     });
   };
 
@@ -173,7 +180,10 @@ var guiders = (function($) {
       if (event.keyCode == 27 || event.which == 27) {
         guiders.hideAll();
         if (myGuider.onClose) {
-          myGuider.onClose(myGuider, true /*close by X/Escape*/);
+          myGuider.onClose(myGuider, true /* close by X/Escape */);
+        }
+        if (guiders._onClose) {
+          guiders._onClose(myGuider, true /* close by X/Escape */);
         }
         return false;
       }
@@ -516,7 +526,11 @@ var guiders = (function($) {
   };
 
   guiders.onShow = function(callback) {
-    guiders._onShowCallbacks.push(callback);
+    guiders._onShow = callback;
+  }
+
+  guiders.onClose = function(callback) {
+    guiders._onClose = callback;
   }
 
   guiders.show = function(id) {
