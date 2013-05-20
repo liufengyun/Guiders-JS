@@ -91,6 +91,7 @@ var guiders = (function($) {
   guiders._windowHeight = 0;
   guiders._onShow = null;
   guiders._onClose = null;
+  guiders.shouldSkip = null;
 
   // Basic IE browser detection
   var ieBrowserMatch = navigator.userAgent.match('MSIE (.)');
@@ -407,7 +408,8 @@ var guiders = (function($) {
       if (currentGuider && currentGuider.highlight) {
         guiders._dehighlightElement(currentGuider.highlight);
       }
-      if (nextGuider.shouldSkip && nextGuider.shouldSkip()) {
+      if ((nextGuider.shouldSkip && nextGuider.shouldSkip()) ||
+          (guiders.shouldSkip && guiders.shouldSkip(nextGuider))) {
         guiders._currentGuiderID = nextGuider.id;
         guiders.next();
         return;
